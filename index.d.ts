@@ -54,6 +54,7 @@ export interface DropdownAlertProps {
     accessibilityLabel?: string
     titleTextProps?: object
     messageTextProps?: object
+    position?: 'top' | 'bottom'
   }
   export type DropdownAlertType =
     | 'info'

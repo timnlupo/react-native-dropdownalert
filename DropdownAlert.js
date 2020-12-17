@@ -105,6 +105,7 @@ export default class DropdownAlert extends Component {
     titleTextProps: PropTypes.object,
     messageTextProps: PropTypes.object,
     onTap: PropTypes.func,
+    position: PropTypes.oneOf(['top', 'bottom']),
   };
   static defaultProps = {
     onClose: () => {},
@@ -192,6 +193,7 @@ export default class DropdownAlert extends Component {
     titleTextProps: undefined,
     messageTextProps: undefined,
     onTap: () => {},
+    position: undefined
   };
   constructor(props) {
     super(props);
@@ -418,9 +420,17 @@ export default class DropdownAlert extends Component {
     }
     return end;
   };
-  getOutputRange = (height, startDelta, endDelta) => {
+  getOutputRange = (height, startDelta, endDelta, position) => {
     if (!height) {
       return [startDelta, endDelta];
+    }
+    if (position) {
+      switch (position) {
+        case "top":
+          return [defaultProps.startDelta, defaultProps.endDelta];
+        case "bottom":
+          return [HEIGHT, HEIGHT-height];
+      }
     }
     const start = this.getStartDelta(height, startDelta);
     const end = this.getEndDelta(height, endDelta);
@@ -571,6 +581,7 @@ export default class DropdownAlert extends Component {
       translucent,
       updateStatusBar,
       showCancel,
+      position,
     } = this.props;
     const {animationValue, topValue, height} = this.state;
     const {type, payload} = this.alertData;
@@ -590,7 +601,7 @@ export default class DropdownAlert extends Component {
       style = [style, {paddingTop: StatusBar.currentHeight}];
     }
     this.updateStatusBar(updateStatusBar, true);
-    const outputRange = this.getOutputRange(height, startDelta, endDelta);
+    const outputRange = this.getOutputRange(height, startDelta, endDelta, position);
     let wrapperAnimStyle = {
       transform: [
         {
